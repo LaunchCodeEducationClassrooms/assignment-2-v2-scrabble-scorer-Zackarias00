@@ -34,6 +34,7 @@ let word = ''
 
 function initialPrompt() {
   alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',' '];
+  
 
   let word = input.question("Let's play some Scrabble!\n\nEnter a word to score: ");
 
@@ -131,10 +132,10 @@ function transform(oldPointStructure) {
   for (key in oldPointStructure){
     if (oldPointStructure[key].length >1){
       for(i=0;i<oldPointStructure[key].length;i++){
-        newPointStructure[oldPointStructure[key][i]] = Number(key);
+        newPointStructure[oldPointStructure[key.toLowerCase()][i]] = Number(key);
       } 
       } else {
-        newPointStructure[oldPointStructure[key][0]] = Number(key);
+        newPointStructure[oldPointStructure[key.toLowerCase()][0]] = Number(key);
       }
     }
   return newPointStructure;
