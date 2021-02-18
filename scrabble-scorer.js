@@ -37,14 +37,21 @@ function initialPrompt() {
   
 
   let word = input.question("Let's play some Scrabble!\n\nEnter a word to score: ");
+  validatedWord = ''
 
   for (i=0;i<word.length;i++){
     if(alphabet.includes(word[i])==false){
-      console.log('Invalid Input.');
-      initialPrompt();
+      
     } else{
-      console.log(`Score for '${word}': ${scorerPrompt(word)}`);
+      validatedWord += word[i];  
     }
+  }
+
+  if (validatedWord == word){
+    scorerPrompt(word);
+  } else {
+    console.log('Invalid Input.');
+    initialPrompt();
   }
     
 }
@@ -79,7 +86,7 @@ let vowelBonusScore = function(word){
 }
 
 let scrabbleScore = function(word){
-  word = word.toUpperCase();
+  word = word.toLowerCase();
   score = 0;
   for (i=0;i<word.length;i++){
     letter = word[i];
@@ -91,13 +98,13 @@ let scrabbleScore = function(word){
 const scoringAlgorithms = [
   {name: 'Simple Score',
   description: 'Each letter is worth 1 point.',
-  scorerFunction: simpleScore},
+  scoringFunction: simpleScore},
   {name: 'Bonus Vowels',
   description:'Vowels are 3 pts,consonants are 1 pt.',
-  scorerFunction:vowelBonusScore},
+  scoringFunction:vowelBonusScore},
   {name: 'Scrabble',
   description: 'The traditional scoring algorithm.',
-  scorerFunction: scrabbleScore}
+  scoringFunction: scrabbleScore}
 ];
 
 
@@ -121,9 +128,9 @@ function scorerPrompt(word) {
   }  
 
 
-  score = scoringAlgorithms[selection].scorerFunction(word);
+  score = scoringAlgorithms[selection].scoringFunction(word);
 
-  return score;
+  console.log(`Score for '${word}': ${score}`);
 
 }
 
@@ -132,11 +139,15 @@ function transform(oldPointStructure) {
   for (key in oldPointStructure){
     if (oldPointStructure[key].length >1){
       for(i=0;i<oldPointStructure[key].length;i++){
-        newPointStructure[oldPointStructure[key.toLowerCase()][i]] = Number(key);
+        newPointStructure[oldPointStructure[key][i]] = Number(key);
       } 
       } else {
-        newPointStructure[oldPointStructure[key.toLowerCase()][0]] = Number(key);
+        newPointStructure[oldPointStructure[key][0]] = Number(key);
       }
+    }
+    for (key in newPointStructure){
+    newPointStructure[key.toLowerCase()] = newPointStructure[key];
+    delete newPointStructure[key];
     }
   return newPointStructure;
 }
